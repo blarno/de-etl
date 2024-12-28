@@ -58,6 +58,17 @@ CREATE TABLE zxcv_dwh_dim_terminals (
     update_dt timestamp
 );
 
+CREATE TABLE zxcv_dwh_dim_terminals_hist (
+    terminal_id VARCHAR,
+    terminal_type VARCHAR,
+    terminal_city VARCHAR,
+    terminal_address VARCHAR,
+    create_dt TIMESTAMP NOT NULL,
+    effective_to DATE NOT NULL DEFAULT '9999-12-31',
+    is_current BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+
 CREATE TABLE zxcv_dwh_fact_passport_blacklist (
     passport_num VARCHAR PRIMARY KEY,
     entry_dt DATE
@@ -76,6 +87,22 @@ CREATE TABLE zxcv_dwh_dim_clients (
     update_dt timestamp
 );
 
+CREATE TABLE zxcv_dwh_dim_clients_hist (
+    client_id          VARCHAR,
+    last_name          VARCHAR,
+    first_name         VARCHAR,
+    patrinymic         VARCHAR,
+    date_of_birth      DATE,
+    passport_num       VARCHAR,
+    passport_valid_to  DATE,
+    phone              VARCHAR,
+    create_dt          TIMESTAMP,
+    update_dt          TIMESTAMP,
+    effective_to       DATE NOT NULL DEFAULT '9999-12-31',
+    is_current         BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+
 CREATE TABLE zxcv_dwh_dim_accounts (
     account_num VARCHAR PRIMARY KEY,
     valid_to DATE,
@@ -85,6 +112,16 @@ CREATE TABLE zxcv_dwh_dim_accounts (
     FOREIGN KEY (client) REFERENCES zxcv_dwh_dim_clients(client_id)
 );
 
+CREATE TABLE zxcv_dwh_dim_accounts_hist (
+    account_num VARCHAR PRIMARY KEY,
+    valid_to DATE,
+    client VARCHAR,
+    create_dt timestamp,
+    update_dt timestamp,
+    effective_to       DATE NOT NULL DEFAULT '9999-12-31',
+    is_current         BOOLEAN NOT NULL DEFAULT TRUE
+);
+
 CREATE TABLE zxcv_dwh_dim_cards (
     card_num VARCHAR PRIMARY KEY,
     account_num VARCHAR,
@@ -92,6 +129,16 @@ CREATE TABLE zxcv_dwh_dim_cards (
     update_dt timestamp,
     FOREIGN KEY (account_num) REFERENCES zxcv_dwh_dim_accounts(account_num)
 );
+
+CREATE TABLE zxcv_dwh_dim_cards_hist (
+    card_num VARCHAR NOT NULL,      
+    account_num VARCHAR,        
+    create_dt TIMESTAMP,            
+    update_dt TIMESTAMP,                  
+    effective_to DATE NOT NULL DEFAULT '9999-12-31', 
+    is_current BOOLEAN NOT NULL DEFAULT TRUE
+);
+
 
 CREATE TABLE zxcv_dwh_fact_transactions (
     trans_id VARCHAR PRIMARY KEY,
